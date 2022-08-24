@@ -1,13 +1,8 @@
-import math
-from multiprocessing import Event
-from re import S
-import re
 import tkinter as tk
-import pyperclip as cp
 
 janela = tk.Tk()
 janela.title('HOTEL')
-janela.geometry('1920x1080+0+0')
+janela.geometry('1600x900+0+0')
 janela.maxsize(1920, 1080)
 
 # frame do orcamento
@@ -32,10 +27,11 @@ class Acomod:
         self.kpc = tk.Label(master=orc_frm, text=f'Quantidade: {self.quantidade} \n Capacidade: {self.capacidade} \n Ocupação: {self.ocupacao}', font='Arial 14')
         self.kpc.place(x=self.cordX, y=self.cordY-80)
         # label de custo
-        self.tot = tk.Label(master=orc_frm, text=f'Total R$:{self.custo()}', font='MsComicSans 14')
+        self.tot = tk.Label(master=orc_frm, text=f"Total R$:{self.custo()}", font='MsComicSans 14')
         self.tot.place(x=self.cordX, y=self.cordY+150)
         self.butao()
 
+        
 
     def butao(self):
         self.btn = tk.Button(orc_frm, text=self.nome, height=5, width=18, font='MsComicSans 14')
@@ -63,6 +59,8 @@ class Acomod:
             return self.ocupacao * self.valor 
     
     def paste(self):
+        janela.clipboard_clear()
+        janela.clipboard_append(self.tot['text']+"   |   ")
         return f'{self.custo()} e mais algumas coisas para fazer sentido'
 
     def stt_change(self, event):
@@ -102,6 +100,7 @@ def aumenta(event=None):
     for i in lista:
         if i.estado==True:
             i.ocupacao+=1
+            i.check()
             i.kpc['text'] = f'Quantidade: {i.quantidade} \n Capacidade: {i.capacidade} \n Ocupação: {i.ocupacao}'
             i.tot['text'] = f'Total R$:{i.custo()}'
             
@@ -110,6 +109,7 @@ def diminui(event=None):
     for i in lista:
         if i.estado==True:
             i.ocupacao-=1
+            i.check()
             i.kpc['text'] = f'Quantidade: {i.quantidade} \n Capacidade: {i.capacidade} \n Ocupação: {i.ocupacao}'
             i.tot['text'] = f'Total R$:{i.custo()}'
 
@@ -129,7 +129,7 @@ def copia(envent=None):
     for i in lista:
         if i.estado==True:
             print(i.paste())
-    return 0
+
 
 cp_btn = tk.Button(orc_frm, font='MsComicSans 14', text='copy to clipboard')
 cp_btn.bind('<Button>', copia)
