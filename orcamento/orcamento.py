@@ -1,8 +1,10 @@
 import tkinter as tk
+from tkinter.messagebox import NO
 
+# janela do orçamento
 janela = tk.Tk()
 janela.title('HOTEL')
-janela.geometry('1600x900+0+0')
+janela.geometry('1920x1080+0+0')
 janela.maxsize(1920, 1080)
 
 # frame do orcamento
@@ -13,7 +15,7 @@ orc_frm.pack()
 # classe de acomodações
 # master, cord de btn, capacidade, valor, imagem, pessoas, 
 class Acomod:
-    def __init__(self, nome, quantidade, capacidade, valor, cordX, cordY, ocupacao=0):
+    def __init__(self, nome, quantidade, capacidade, valor, cordX, cordY, ocupacao):
         self.nome = nome
         self.quantidade = quantidade 
         self.capacidade = capacidade
@@ -31,14 +33,11 @@ class Acomod:
         self.tot.place(x=self.cordX, y=self.cordY+150)
         self.butao()
 
-        
-
     def butao(self):
         self.btn = tk.Button(orc_frm, text=self.nome, height=5, width=18, font='MsComicSans 14')
         self.btn.bind('<Button>', self.stt_change)
         self.btn.place(x=self.cordX, y=self.cordY)
         
-
     def check(self):
         if(self.ocupacao > self.capacidade):
             self.quantidade += 1
@@ -59,10 +58,9 @@ class Acomod:
             return self.ocupacao * self.valor 
     
     def paste(self):
-        janela.clipboard_clear()
-        janela.clipboard_append(self.tot['text']+"   |   ")
-        return f'{self.custo()} e mais algumas coisas para fazer sentido'
-
+        copypasta = f"_{self.nome}_ para {self.ocupacao} adultos\n*R$ {self.custo()}*\n"
+        janela.clipboard_append(copypasta)
+        
     def stt_change(self, event):
         if(self.estado==False):
             self.btn['bg']='light green'
@@ -70,7 +68,6 @@ class Acomod:
         else:
             self.btn['bg']='white'
             self.estado=False
-
 
 # criando as acomod
 suit = Acomod('Suíte', 1, 10, 10.00, 400 , 250, 0)
@@ -126,13 +123,32 @@ mens_btn.place(x=850, y=550)
 # copy to clipboard
 def copia(envent=None):
     lista = [suit, apto, cabn, casa, swis, stan]
+    janela.clipboard_clear()
     for i in lista:
         if i.estado==True:
-            print(i.paste())
-
+            i.paste()
 
 cp_btn = tk.Button(orc_frm, font='MsComicSans 14', text='copy to clipboard')
 cp_btn.bind('<Button>', copia)
 cp_btn.place(x=1000, y=550)
+
+# abrir tela de configurações
+def config(event=None):
+    cfg_win = tk.Toplevel()
+    cfg_win.title('HOTEL')
+    cfg_win.geometry('1920x1080+0+0')
+    cfg_win.maxsize(1920, 1080)
+    cfg_frm = tk.Frame(master=cfg_win, height=1080, width=1920)
+    
+
+
+# botão para as configurações
+cfg_btn = tk.Button(orc_frm, font='MsComicSans 14', text='Configurações')
+cfg_btn.bind('<Button>', config)
+cfg_btn.place(x=1750, y=0)
+
+# janela das configurações
+
+# frame das configurações
 
 janela.mainloop()
