@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkinter.messagebox import NO
 
 # janela do orçamento
 janela = tk.Tk()
@@ -53,12 +52,12 @@ class Acomod:
     def custo(self):
         
         if(self.check()==1):
-            return 'valor negativo'
+            return '---------'
         else:
             return self.ocupacao * self.valor 
     
     def paste(self):
-        copypasta = f"_{self.nome}_ para {self.ocupacao} adultos\n*R$ {self.custo()}*\n"
+        copypasta = f"_*{self.nome}*_\nR$ {self.custo()} (valor de 24h)\nR${self.custo()*1.9} (valor de 48h)\n"
         janela.clipboard_append(copypasta)
         
     def stt_change(self, event):
@@ -76,7 +75,7 @@ suit = Acomod('Suíte', 1, 10, 10.00, 400 , 250, 0)
 apto = Acomod('Apartamento', 1, 5, 10.00, 600, 250, 0)
 
 
-cabn = Acomod('CabanaAmericana', 1, 3, 10.00, 800, 250, 0)
+cabn = Acomod('Cabana Americana', 1, 3, 10.00, 800, 250, 0)
 
 
 casa = Acomod('Casarão', 1, 5, 10.00, 1000, 250, 0)
@@ -124,6 +123,9 @@ mens_btn.place(x=850, y=550)
 def copia(envent=None):
     lista = [suit, apto, cabn, casa, swis, stan]
     janela.clipboard_clear()
+    janela.clipboard_append("Segue orçamento que corresponde a quantidade de pessoas e as acomodações disponíveis para a data. " +
+    "Caso queira saber valores para mais diárias, pode nos avisar, ok? (o orçamento terá validade de 15 dias)\n"+
+    "\n*DIÁRIA COM CAFÉ DA MANHÃ*\n")
     for i in lista:
         if i.estado==True:
             i.paste()
@@ -150,5 +152,6 @@ cfg_btn.place(x=1750, y=0)
 # janela das configurações
 
 # frame das configurações
+
 
 janela.mainloop()
