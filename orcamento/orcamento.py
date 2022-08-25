@@ -14,7 +14,6 @@ orc_frm['bg'] = 'gray'
 orc_frm.pack()
 
 # puxando a tabela
-orc_df = pd.read_excel("./orcamento/TABELA_PADRAO.xlsx")
 # escolher qual tabela usar
 def pesquisar(event=None):
     arquivo = filedialog.askopenfilename(initialdir="./orcamento",
@@ -32,9 +31,7 @@ psq_lbl = tk.Label(master=orc_frm, font="MsComicSans 14")
 psq_lbl.place(x=50, y=80)
 
 # ler a tabela no python
-tst_btn = tk.Button(master=orc_frm, font="MsComicSans 14", text="teste", command=print(orc_df))
 
-tst_btn.place(x=50, y=180)
 
 
 # classe de acomodações
