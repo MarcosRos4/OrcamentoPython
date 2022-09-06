@@ -30,7 +30,8 @@ psq_lbl.place(x=50, y=80)
 # master, cord de btn, capacidade, valor, imagem, pessoas, 
 class Acomod:
     def __init__(self, nome, quantidade, capacidade,cordX, cordY, ocupacao):
-        self.capacidade = capacidade
+        self.capacidadeT = capacidade
+        self.capacidadeA = capacidade
         self.cordX = cordX
         self.cordY = cordY
         self.estado = False
@@ -40,7 +41,7 @@ class Acomod:
         self.valor = 0   
 
         # label de ocupação
-        self.kpc = tk.Label(master=orc_frm, text=f'Quantidade: {self.quantidade} \n Capacidade: {self.capacidade} \n Ocupação: {self.ocupacao}', font='Arial 14')
+        self.kpc = tk.Label(master=orc_frm, text=f'Quantidade: {self.quantidade} \n Capacidade: {self.capacidadeA} \n Ocupação: {self.ocupacao}', font='Arial 14')
         self.kpc.place(x=self.cordX, y=self.cordY-80)
         # label de custo
         self.tot = tk.Label(master=orc_frm, text=f"Total R$:{self.custo()}", font='MsComicSans 14')
@@ -53,30 +54,25 @@ class Acomod:
         self.btn.place(x=self.cordX, y=self.cordY)
         
     def check(self):
-        if(self.ocupacao > self.capacidade):
+        if(self.ocupacao > self.capacidadeA):
             self.quantidade += 1
-            self.capacidade*=2
-        elif(self.ocupacao<=self.capacidade/2 and self.quantidade>1):
-            self.capacidade/=2
+            self.capacidadeA+=self.capacidadeT
+        elif(self.ocupacao<=self.capacidadeA-self.capacidadeT and self.quantidade>1):
+            self.capacidadeA-=self.capacidadeT
             self.quantidade-=1
-        elif(self.ocupacao <= 0 ):
-            return 1
-        else:
-            return 0
 
     def custo(self):
-        if(self.check()==1):
-            return '---------'
+        if(self.ocupacao<=0):
+            self.valor=0
+        elif (self.ocupacao == 1):
+            self.valor =  orc_df[self.nome][0]
+        elif ( self.ocupacao == 2):
+            self.valor = orc_df[self.nome][1]
         else:
-            if (self.ocupacao == 1):
-                self.valor =  orc_df[self.nome][0]
-            elif ( self.ocupacao == 2):
-                self.valor = orc_df[self.nome][1]
-            else:
-                self.valor = (orc_df[self.nome][1] + (orc_df[self.nome][2] * (self.ocupacao - 2)))
+            self.valor = (orc_df[self.nome][1] + (orc_df[self.nome][2] * (self.ocupacao - 2)))
     
     def paste(self):
-        copypasta = f"_*{self.nome}*_\nR$ {self.custo()} (valor de 24h)\nR${self.custo()*1.9} (valor de 48h)\n"
+        copypasta = f"_*{self.nome}*_\nR$ {self.valor} (valor de 24h)\nR${self.valor*1.9} (valor de 48h)\n"
         janela.clipboard_append(copypasta)
         
     def stt_change(self, event):
@@ -92,7 +88,7 @@ class Acomod:
             self.ocupacao+=1
             self.check()
             self.custo()
-            self.kpc['text'] = f'Quantidade: {self.quantidade} \n Capacidade: {self.capacidade} \n Ocupação: {self.ocupacao}'
+            self.kpc['text'] = f'Quantidade: {self.quantidade} \n Capacidade: {self.capacidadeA} \n Ocupação: {self.ocupacao}'
             self.tot['text'] = f'Total R$:{self.valor}'
             
     def diminui(self, event=None):
@@ -103,22 +99,22 @@ class Acomod:
                 self.ocupacao-=1
                 self.check()
                 self.custo()
-                self.kpc['text'] = f'Quantidade: {self.quantidade} \n Capacidade: {self.capacidade} \n Ocupação: {self.ocupacao}'
+                self.kpc['text'] = f'Quantidade: {self.quantidade} \n Capacidade: {self.capacidadeA} \n Ocupação: {self.ocupacao}'
                 self.tot['text'] = f'Total R$:{self.valor}'
 
 # criando as acomod
 # parametros nome, quantidade, capacidade,cordX, cordY, ocupacao
-suit = Acomod('suit', 1, 10, 400 , 250, 0)
+suit = Acomod('Suíte', 1, 10, 400 , 250, 0)
 
-apto = Acomod("apto", 1, 5, 600, 250, 0)
+apto = Acomod('Apartamento', 1, 5, 600, 250, 0)
 
-cabn = Acomod('cabn', 1, 3, 800, 250, 0)
+cabn = Acomod('Cabana Americana', 1, 3, 800, 250, 0)
 
-casa = Acomod('casa', 1, 5, 1000, 250, 0)
+casa = Acomod('Casarão', 1, 5, 1000, 250, 0)
 
-swis = Acomod('swis', 1, 3, 1200, 250, 0)
+swis = Acomod('Suíço', 1, 3, 1200, 250, 0)
 
-stan = Acomod('stan', 1, 8, 1400, 250, 0)
+stan = Acomod('Standart', 1, 8, 1400, 250, 0)
 
 
 # icone label
